@@ -8,13 +8,12 @@ using System.Threading.Tasks;
 
 namespace MyEvernote.Entities
 {
-    [Table("Comments")]
-    public class Comment : MyEntityBase
+    public class Liked
     {
-        [Required, StringLength(300)]
-        public string Text { get; set; }
+        [Key,DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
 
-        public Note Note { get; set; }
-        public EvernoteUser Owner { get; set; }
+        public virtual Note Note { get; set; }
+        public virtual EvernoteUser LikedUser { get; set; }
     }
 }

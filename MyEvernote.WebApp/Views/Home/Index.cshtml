@@ -1,25 +1,19 @@
-﻿
+﻿@using MyEvernote.Entities
+@model List<Note>
 @{
     ViewBag.Title = "Index";
 }
-
-<!-- Sayfa İçeriği -->
-<div class="container">
+<!-- Page Content -->
+<div class="container" style="margin-top: 2.3em;">
     <div class="row">
+        <!-- Kategoriler -->
         <div class="col-md-3">
-            <!-- Kategoriler -->
-            <p class="lead">Kategoriler</p>
-            <div class="list-group">
-                <a href="#" class="list-group-item"><span class="far fa-arrow-right"> Tümü</span></a>
-                <a href="#" class="list-group-item"><span class="far fa-arrow-right"> Category 1</span></a>
-                <a href="#" class="list-group-item"><span class="far fa-arrow-right"> Category 2</span></a>
-                <a href="#" class="list-group-item"><span class="far fa-arrow-right"> Category 3</span></a>
-            </div>
+            @Html.Partial("_PartialCategories")
         </div>
         <div class="col-md-9">
-            <!-- Caruosel Slider -->
+            <!-- Carousel -->
             <div class="row carousel-holder">
-                <div class="col-md-12" style="margin-bottom:1.5em" >
+                <div class="col-md-12">
                     <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
                         <ol class="carousel-indicators">
                             <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
@@ -45,219 +39,55 @@
                         </a>
                     </div>
                 </div>
-                <!-- Yazılar -->
-                <div class="">
-                    <div class="col-sm-4 col-lg-4 col-md-4">
+            </div>
+            <!-- Notlar -->
+            <div class="row">
+                @foreach (Note note in Model)
+                {
+                    <div class="col-sm-4 col-lg-4 col-md-4" data-note-id="@note.Id">
                         <div class="thumbnail">
-                            <img src="http://placehold.it/320x150" alt="">
+                            <img src="http://placehold.it/320x150" alt="@note.Title">
                             <div class="caption">
                                 <h4>
-                                    <a href="#">
-                                        Sit amet, consectetur.
+                                    <a href="#" data-toggle="modal" data-target="#modal_notedetail" data-note-id="@note.Id">
+                                        @note.Title
                                     </a>
                                 </h4>
-                                <p>
-                                    Mi, id sollicitudin urna fermentum ut fusce varius nisl ac ipsum gravida vel pretium tellus.
-                                </p>
                                 <h6 class="text-right">
-                                    <span class=" far fa-user"> ismailpehlevan</span><br />
-                                    <span class=" far fa-clock"> 13:34 01.01.2019</span>
+                                    @note.Owner.Username <span class="glyphicon glyphicon-user"></span><br />
+                                    @note.ModifiedOn.ToString("dd.MM.yy HH:mm") <span class="glyphicon glyphicon-time"></span>
                                 </h6>
+                                @if (string.IsNullOrEmpty(note.Text) == false && note.Text.Length > 70)
+                                {
+                                    <p>@(note.Text.Substring(0, 70) + "...")</p>
+                                    <p class="pull-right">
+                                        <a href="#" data-toggle="modal" data-target="#modal_notedetail" data-note-id="@note.Id" class="btn btn-default btn-sm">devamı <span class="glyphicon glyphicon-chevron-right"></span></a>
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p>@note.Text</p>
+                                }
                             </div>
                             <div>
                                 <hr />
                             </div>
-                            <div class="ratings" style="padding-top:0.5em">
+                            <div class="ratings">
                                 <p class="pull-right">
-                                    <button class="btn btn-default btn-sm" type="button">
-                                        <span class="far fa-comment"> Yorumlar</span>
+                                    <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal_comment" data-note-id="@note.Id">
+                                        <span class="glyphicon glyphicon-comment"></span> Yorumlar
                                     </button>
                                 </p>
                                 <p>
-                                    <button type="button" class="btn btn-default btn-sm">
-                                        <span class="far fa-star"> 10</span>
+                                    <button class="btn btn-default btn-sm" type="button" data-liked="false" data-note-id="@note.Id">
+                                        <span class="glyphicon glyphicon-star-empty like-star"></span>&nbsp;
+                                        <span class="like-count">@note.LikeCount</span>
                                     </button>
-
                                 </p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-4 col-lg-4 col-md-4">
-                        <div class="thumbnail">
-                            <img src="http://placehold.it/320x150" alt="">
-                            <div class="caption">
-                                <h4>
-                                    <a href="#">
-                                        Sit amet, consectetur.
-                                    </a>
-                                </h4>
-                                <p>
-                                    Mi, id sollicitudin urna fermentum ut fusce varius nisl ac ipsum gravida vel pretium tellus.
-                                </p>
-                                <h6 class="text-right">
-                                    <span class=" far fa-user"> ismailpehlevan</span><br />
-                                    <span class=" far fa-clock"> 13:34 01.01.2019</span>
-                                </h6>
-                            </div>
-                            <div>
-                                <hr />
-                            </div>
-                            <div class="ratings" style="padding-top:0.5em">
-                                <p class="pull-right">
-                                    <button class="btn btn-default btn-sm" type="button">
-                                        <span class="far fa-comment"> Yorumlar</span>
-                                    </button>
-                                </p>
-                                <p>
-                                    <button type="button" class="btn btn-default btn-sm">
-                                        <span class="far fa-star"> 10</span>
-                                    </button>
-
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4 col-lg-4 col-md-4">
-                        <div class="thumbnail">
-                            <img src="http://placehold.it/320x150" alt="">
-                            <div class="caption">
-                                <h4>
-                                    <a href="#">
-                                        Sit amet, consectetur.
-                                    </a>
-                                </h4>
-                                <p>
-                                    Mi, id sollicitudin urna fermentum ut fusce varius nisl ac ipsum gravida vel pretium tellus.
-                                </p>
-                                <h6 class="text-right">
-                                    <span class=" far fa-user"> ismailpehlevan</span><br />
-                                    <span class=" far fa-clock"> 13:34 01.01.2019</span>
-                                </h6>
-                            </div>
-                            <div>
-                                <hr />
-                            </div>
-                            <div class="ratings" style="padding-top:0.5em">
-                                <p class="pull-right">
-                                    <button class="btn btn-default btn-sm" type="button">
-                                        <span class="far fa-comment"> Yorumlar</span>
-                                    </button>
-                                </p>
-                                <p>
-                                    <button type="button" class="btn btn-default btn-sm">
-                                        <span class="far fa-star"> 10</span>
-                                    </button>
-
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4 col-lg-4 col-md-4">
-                        <div class="thumbnail">
-                            <img src="http://placehold.it/320x150" alt="">
-                            <div class="caption">
-                                <h4>
-                                    <a href="#">
-                                        Sit amet, consectetur.
-                                    </a>
-                                </h4>
-                                <p>
-                                    Mi, id sollicitudin urna fermentum ut fusce varius nisl ac ipsum gravida vel pretium tellus.
-                                </p>
-                                <h6 class="text-right">
-                                    <span class=" far fa-user"> ismailpehlevan</span><br />
-                                    <span class=" far fa-clock"> 13:34 01.01.2019</span>
-                                </h6>
-                            </div>
-                            <div>
-                                <hr />
-                            </div>
-                            <div class="ratings" style="padding-top:0.5em">
-                                <p class="pull-right">
-                                    <button class="btn btn-default btn-sm" type="button">
-                                        <span class="far fa-comment"> Yorumlar</span>
-                                    </button>
-                                </p>
-                                <p>
-                                    <button type="button" class="btn btn-default btn-sm">
-                                        <span class="far fa-star"> 10</span>
-                                    </button>
-
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4 col-lg-4 col-md-4">
-                        <div class="thumbnail">
-                            <img src="http://placehold.it/320x150" alt="">
-                            <div class="caption">
-                                <h4>
-                                    <a href="#">
-                                        Sit amet, consectetur.
-                                    </a>
-                                </h4>
-                                <p>
-                                    Mi, id sollicitudin urna fermentum ut fusce varius nisl ac ipsum gravida vel pretium tellus.
-                                </p>
-                                <h6 class="text-right">
-                                    <span class=" far fa-user"> ismailpehlevan</span><br />
-                                    <span class=" far fa-clock"> 13:34 01.01.2019</span>
-                                </h6>
-                            </div>
-                            <div>
-                                <hr />
-                            </div>
-                            <div class="ratings" style="padding-top:0.5em">
-                                <p class="pull-right">
-                                    <button class="btn btn-default btn-sm" type="button">
-                                        <span class="far fa-comment"> Yorumlar</span>
-                                    </button>
-                                </p>
-                                <p>
-                                    <button type="button" class="btn btn-default btn-sm">
-                                        <span class="far fa-star"> 10</span>
-                                    </button>
-
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4 col-lg-4 col-md-4">
-                        <div class="thumbnail">
-                            <img src="http://placehold.it/320x150" alt="">
-                            <div class="caption">
-                                <h4>
-                                    <a href="#">
-                                        Sit amet, consectetur.
-                                    </a>
-                                </h4>
-                                <p>
-                                    Mi, id sollicitudin urna fermentum ut fusce varius nisl ac ipsum gravida vel pretium tellus.
-                                </p>
-                                <h6 class="text-right">
-                                    <span class=" far fa-user"> ismailpehlevan</span><br />
-                                    <span class=" far fa-clock"> 13:34 01.01.2019</span>
-                                </h6>
-                            </div>
-                            <div>
-                                <hr />
-                            </div>
-                            <div class="ratings" style="padding-top:0.5em">
-                                <p class="pull-right">
-                                    <button class="btn btn-default btn-sm" type="button">
-                                        <span class="far fa-comment"> Yorumlar</span>
-                                    </button>
-                                </p>
-                                <p>
-                                    <button type="button" class="btn btn-default btn-sm">
-                                        <span class="far fa-star"> 10</span>
-                                    </button>
-
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                }
             </div>
         </div>
     </div>
