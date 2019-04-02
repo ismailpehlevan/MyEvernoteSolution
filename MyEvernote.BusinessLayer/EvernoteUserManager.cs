@@ -52,7 +52,7 @@ namespace MyEvernote.BusinessLayer
 
                 });
 
-                if (dbResult>1)
+                if (dbResult>0)
                 {
                     repo_user.Find(x => x.Email == data.Email && x.Username == data.Username);
 
