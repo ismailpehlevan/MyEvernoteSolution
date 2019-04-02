@@ -10,7 +10,7 @@
     ViewBag.Title = "MyEvernote - Giriş Sayfası";
 }
 <link href="~/Content/login-register.css" rel="stylesheet" />
-<link href="~/Content/validation-summary.css" rel="stylesheet" />
+
 @using (Html.BeginForm())
 {
     <section class="login-info">
@@ -21,18 +21,21 @@
                 </div>
                 <div class="main-content">
                     @Html.ValidationSummary(false)
-                    @*@if (ViewBag.SetLink != null)
-                        {
-                            <a href="@ViewBag.SetLink" class="btn btn-primary">Activate</a>
-                        }*@
-                    <div class="input-group ">
+                    @if (ViewBag.SetLink != null)
+                    {
+                        <a href="@ViewBag.SetLink" class="btn btn-primary">Activate</a>
+                    }
+                    <!-- USERNAME LABEL AND TEXTBOX -->
+                    <div class="input-group">
                         <span class="input-group-addon"><span class="fas fa-user" aria-hidden="true"></span></span>
                         @Html.TextBoxFor(model => model.Username, new { @class = "form-control", placeholder = "Kullanıcı adınız" })
                     </div>
+                    <!-- PASSWORD LABEL AND TEXT_BOX-->
                     <div class="input-group">
                         <span class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></span>
                         @Html.TextBoxFor(model => model.Password, new { @class = "form-control", placeholder = "Şifreniz", type = "password" })
                     </div>
+                    <!-- SUBMIT BUTTON -->
                     <div class="form-group ">
                         <button type="submit" class="btn btn-danger btn-lg btn-block login-button">Giriş</button>
                     </div>

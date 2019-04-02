@@ -54,6 +54,7 @@ namespace MyEvernote.DataAccessLayer.EntityFramework
                 MyEntityBase o = obj as MyEntityBase;
 
                 o.ModifiedOn = DateTime.Now;
+                o.ModifiedUsername = "system update";
                
             }
             return Save();

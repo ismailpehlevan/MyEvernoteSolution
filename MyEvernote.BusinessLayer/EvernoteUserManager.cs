@@ -68,7 +68,7 @@ namespace MyEvernote.BusinessLayer
 
         public BusinessLayerResult<EvernoteUser> LoginUser(LoginViewModel data)
         {
-            EvernoteUser user = repo_user.Find(x => x.Username == data.Username || x.Password == data.Password);
+            EvernoteUser user = repo_user.Find(x => x.Username == data.Username && x.Password == data.Password);
             BusinessLayerResult<EvernoteUser> res = new BusinessLayerResult<EvernoteUser>();
 
             res.Result = user;

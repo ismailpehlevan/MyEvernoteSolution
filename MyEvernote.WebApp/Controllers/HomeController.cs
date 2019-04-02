@@ -1,5 +1,6 @@
 ﻿using MyEvernote.BusinessLayer;
 using MyEvernote.Entities;
+using MyEvernote.Entities.Messages;
 using MyEvernote.Entities.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -66,13 +67,20 @@ namespace MyEvernote.WebApp.Controllers
         public ActionResult Login(LoginViewModel model)
         {
             EvernoteUserManager eum = new EvernoteUserManager();
-            BusinessLayerResult<EvernoteUser> res = eum.LoginUser(model); // Giriş Kontrolü ve yönlendirme...
+            BusinessLayerResult<EvernoteUser> res = eum.LoginUser(model); // Giriş Kontrolü
 
             if (ModelState.IsValid)
             {
                 if (res.Errors.Count > 0)
                 {
+                    //Hataları ModelState'e ekleme..
+                    
+                    if(res.Errors.Find(x=>x.Code == ErrorMessageCode.UserIsNotActive) != null)
+                    {
+                        ViewBag.SetLink = "http://Home/Activate/1234-4894-65489";
+                    }
                     res.Errors.ForEach(x => ModelState.AddModelError("", x.Message));
+
                     return View(model);
                 }
 
@@ -97,13 +105,9 @@ namespace MyEvernote.WebApp.Controllers
             if (res.Errors.Count>0)
             {
                 res.Errors.ForEach(x => ModelState.AddModelError("", x.Message));
-
                 return View(model);
             }
-
             
-
-
             return RedirectToAction("RegisterOk");
         }
 
@@ -114,7 +118,9 @@ namespace MyEvernote.WebApp.Controllers
 
         public ActionResult Logout()
         {
-            return View();
+            Session.Clear();
+
+            return RedirectToAction("Index");
         }
 
         public ActionResult UserActivate(Guid activate_id)
